@@ -32,9 +32,9 @@ This lib version can have bugs, wait for more updates.
   after, you need register your GUI.
   
   ```java
-  manager.add(guib.build());
+  manager.add(builder.build());
   ```
   to open your GUI you can use:
   ```
-  manager.openGUI((Player) sender, "LOJA");
+  manager.openGUI(player, nameGUI);
   ```
