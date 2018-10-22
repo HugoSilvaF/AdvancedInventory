@@ -1,7 +1,7 @@
 # GUI
 A simple GUI lib of inventory for minecraft plugins.
 
-## Version 1.0
+## Version 1.1
 
 ### OBSERVATION:
 This lib version can have bugs, wait for more updates.
