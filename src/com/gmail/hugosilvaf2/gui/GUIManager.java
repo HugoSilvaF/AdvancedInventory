@@ -28,6 +28,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
@@ -55,14 +56,14 @@ public class GUIManager
 
         final Player whoClicked = (Player) event.getWhoClicked();
 
-        if ((sections.hasSection(whoClicked)) && (event.getCurrentItem() != null) && (!event.getCurrentItem().getType().equals(Material.AIR))) {
-            Section section = sections.getSection(whoClicked);
+        if (!(sections.hasSection(whoClicked))) {
+            return;
+        }
+        Section section = sections.getSection(whoClicked);
+        if ((event.getCurrentItem() != null) && (!event.getCurrentItem().getType().equals(Material.AIR))) {
             ItemStack currentItem = event.getCurrentItem();
-
             final GUIObject guio = section.getNowPage().get(event.getSlot());
-            if (event.getInventory().equals(section.getInventory())) {
-                event.setCancelled(true);
-            }
+
             if ((guio != null) && (guio.getIcon().equals(currentItem))) {
                 event.setCancelled(guio.isCancelClick());
                 Result result = guio.onClick(new Source(whoClicked, section, event.getClick(), new boolean[]{event.isLeftClick(), event.isRightClick(), event.isShiftClick()}));
@@ -90,9 +91,25 @@ public class GUIManager
                 if (result.equals(Result.CLOSE)) {
                     whoClicked.closeInventory();
                     sections.remove(section);
+                    return;
                 }
             }
         }
+        // to cancel move and place items for GUI
+        if (section.compareTo(event.getInventory())) {
+            if (event.getRawSlot() >= (section.getInventory().getSize() - 1) && event.getRawSlot() <= (section.getInventory().getSize() - 1) + 36) {
+                if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                    event.setCancelled(true);
+                }
+            }
+
+            if (event.getRawSlot() >= 0 && event.getRawSlot() <= (section.getInventory().getSize() - 1)) {
+                if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_ONE) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+
     }
 
     @EventHandler

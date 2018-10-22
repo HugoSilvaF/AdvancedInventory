@@ -18,6 +18,7 @@ package com.gmail.hugosilvaf2.gui.lib.sections;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
 import com.gmail.hugosilvaf2.gui.lib.Page;
+import java.util.Arrays;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
@@ -58,6 +59,10 @@ public class Section {
 
     public int getLastPageInt() {
         return nowPage >= 0 ? nowPage - 1 : 0;
+    }
+
+    public boolean compareTo(Inventory i) {
+        return ((inventory.getName().equals(i.getName())) && (Arrays.stream(inventory.getContents()).filter(a -> Arrays.stream(i.getContents()).filter(b -> a.equals(b)).findFirst().isPresent()).findFirst().isPresent()));
     }
 
     public Player getViewer() {

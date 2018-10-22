@@ -30,12 +30,7 @@ public class Sections
     }
 
     public Section getSection(String name) {
-        for (Section section : this) {
-            if (section.getViewer().getName().equals(name)) {
-                return section;
-            }
-        }
-        return null;
+        return stream().filter(a -> a.getViewer().getName().equals(name)).findFirst().get();
     }
 
     public boolean hasSection(Player player) {

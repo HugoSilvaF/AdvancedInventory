@@ -58,9 +58,7 @@ public class GUIBuilder {
 
     public GUI build() {
         gui = new GUI(name, title, size);
-        for (Page page : pages) {
-            gui.add(page);
-        }
+        pages.stream().forEach(a -> gui.add(a));
         return gui;
     }
 
