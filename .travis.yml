@@ -1,0 +1,12 @@
+
+# Use https://travis-ci.org/ for automatic testing
+
+# This is a java project
+language: java
+
+script: mvn install
+
+jdk:
+  - oraclejdk8
+  - oraclejdk9
+  - openjdk8
