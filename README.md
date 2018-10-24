@@ -1,5 +1,7 @@
+
 # GUI
 A simple GUI lib of inventory for minecraft plugins.
+[![Build Status](https://travis-ci.org/CrazyDev/GUI.svg?branch=wolfgang)](https://travis-ci.org/CrazyDev/GUI)
 
 ## Version 1.1
 
