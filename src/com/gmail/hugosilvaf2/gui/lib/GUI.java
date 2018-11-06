@@ -31,14 +31,29 @@ public class GUI
         this.size = size;
     }
 
+    /**
+     * Obtém o nome do GUI por exemplo "Loja"
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Obtém o título do GUI, este ficará visível no inventário
+     *
+     * @return
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     * Obtém o tamnho do GUI, que deverá ser o mesmo tamanho das páginas
+     *
+     * @return
+     */
     public int getSize() {
         return size;
     }

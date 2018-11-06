@@ -96,16 +96,18 @@ public class GUIManager
             }
         }
         // to cancel move and place items for GUI
-        if (section.compareTo(event.getInventory())) {
-            if (event.getRawSlot() >= (section.getInventory().getSize() - 1) && event.getRawSlot() <= (section.getInventory().getSize() - 1) + 36) {
-                if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
-                    event.setCancelled(true);
+        if (!section.getNowPage().getMoveItems()) {
+            if (section.compareTo(event.getInventory())) {
+                if (event.getRawSlot() >= (section.getInventory().getSize() - 1) && event.getRawSlot() <= (section.getInventory().getSize() - 1) + 36) {
+                    if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
+                        event.setCancelled(true);
+                    }
                 }
-            }
 
-            if (event.getRawSlot() >= 0 && event.getRawSlot() <= (section.getInventory().getSize() - 1)) {
-                if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_ONE) {
-                    event.setCancelled(true);
+                if (event.getRawSlot() >= 0 && event.getRawSlot() <= (section.getInventory().getSize() - 1)) {
+                    if (event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_ONE) {
+                        event.setCancelled(true);
+                    }
                 }
             }
         }

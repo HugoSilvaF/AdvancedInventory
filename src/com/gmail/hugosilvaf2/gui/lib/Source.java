@@ -39,27 +39,59 @@ public class Source {
         this.clicks = clicks;
     }
 
+    /**
+     * Obtém o jogador que executou a ação
+     *
+     * @return
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Obtém o GUI, lembre-se que o GUI não é a página atual
+     *
+     * @return
+     */
     public GUI getGui() {
         return gui;
     }
 
+    /**
+     * Obtém o tipo de click
+     *
+     * @return
+     */
     public ClickType getClickType() {
         return clickType;
     }
 
+    /**
+     * Obtém o inventário do jogador
+     *
+     * @return
+     */
     public Inventory getPlayerInventory() {
         return getPlayer().getInventory();
     }
 
+    /**
+     * Envia mensagem ao jogador
+     *
+     * @param message
+     * @return
+     */
     public Source sendMessage(String... message) {
         getPlayer().sendMessage(message);
         return this;
     }
 
+    /**
+     * Envia ItemStack ao jogador
+     *
+     * @param itemStack
+     * @return
+     */
     public Source sendItemStack(ItemStack itemStack) {
         if ((itemStack != null) && (!itemStack.getType().equals(Material.AIR))) {
             PlayerInventory inventory = getPlayer().getInventory();
@@ -74,14 +106,29 @@ public class Source {
         return this;
     }
 
+    /**
+     * Obtém a boolean se o jogador clicou com o botão esquerdo do mouse
+     *
+     * @return
+     */
     public boolean clickedLeft() {
         return clicks[0];
     }
 
+    /**
+     * Obtém a boolean se o jogador clicou com o botão direit do mouse
+     *
+     * @return
+     */
     public boolean clickedRight() {
         return clicks[1];
     }
 
+    /**
+     * Obtém a boolean se o jogador clicou com o shift pressionado
+     *
+     * @return
+     */
     public boolean clickedShift() {
         return clicks[2];
     }

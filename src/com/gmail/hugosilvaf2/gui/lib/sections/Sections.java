@@ -25,18 +25,42 @@ public class Sections
     public Sections() {
     }
 
+    /**
+     * Obtém a seção através do jogador
+     *
+     * @param player
+     * @return
+     */
     public Section getSection(Player player) {
         return getSection(player.getName());
     }
 
+    /**
+     * Obtém a seção através do nome do jogador
+     *
+     * @param name
+     * @return
+     */
     public Section getSection(String name) {
         return stream().filter(a -> a.getViewer().getName().equals(name)).findFirst().get();
     }
 
+    /**
+     * Obtém a boolean através do jogador, se a seção existe, true, se não false
+     *
+     * @param name
+     * @return
+     */
     public boolean hasSection(Player player) {
         return getSection(player) != null;
     }
 
+    /**
+     * Obtém a boolean através do nome, se a seção existe, true, se não false
+     *
+     * @param name
+     * @return
+     */
     public boolean hasSection(String name) {
         return getSection(name) != null;
     }

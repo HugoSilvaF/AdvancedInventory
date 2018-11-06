@@ -35,63 +35,139 @@ public class GUIObjectBuilder {
         result = Result.NOTHING;
     }
 
+    /**
+     * Obtém o ícone
+     *
+     * @return
+     */
     public ItemStack getIcon() {
         return icon;
     }
 
+    /**
+     * Obtém o nome do GUIObject
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Obtém o resultado do GUIObject, se ele irá para próxima página etc..
+     *
+     * @return
+     */
     public Result getResult() {
         return result;
     }
 
+    /**
+     * Pega o novo GUI que será aberto ao clicar neste GUIObject
+     *
+     * @return
+     */
     public GUI getOpenNewGUI() {
         return openNewGUI;
     }
 
+    /**
+     * Pega a localização deste GUIObject
+     *
+     * @return
+     */
     public int getLocation() {
         return location;
     }
 
+    /**
+     * Checa se o click será cancelado ao clicar no GUIObject
+     *
+     * @return
+     */
     public boolean isCancelClick() {
         return cancelClick;
     }
 
+    /**
+     * Seta a localização do GUIObject
+     *
+     * @param location
+     */
     public void setLocation(int location) {
         this.location = location;
     }
 
+    /**
+     * Seta se o click será cancelado ao clicar no GUIObject
+     *
+     * @param cancelClick
+     * @return
+     */
     public GUIObjectBuilder setCancelClick(boolean cancelClick) {
         this.cancelClick = cancelClick;
         return this;
     }
 
+    /**
+     * Seta o novo GUI que será aberto ao clicar no objeto, e se o restulado
+     * retornar OPEN_NEW
+     *
+     * @param openNewGUI
+     * @return
+     */
     public GUIObjectBuilder setOpenNewGUI(GUI openNewGUI) {
         this.openNewGUI = openNewGUI;
         return this;
     }
 
+    /**
+     * Seta o ícone do GUIObject
+     *
+     * @param icon
+     * @return
+     */
     public GUIObjectBuilder setIcon(ItemStack icon) {
         this.icon = icon;
         return this;
     }
 
+    /**
+     * Seta o nome do GUIObject
+     *
+     * @param name
+     * @return
+     */
     public GUIObjectBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Seta o resultado do GUIObject
+     *
+     * @param result
+     * @return
+     */
     public GUIObjectBuilder setResult(Result result) {
         this.result = result;
         return this;
     }
 
+    /**
+     * Obtém a instancia desta classe
+     *
+     * @return
+     */
     public static GUIObjectBuilder instance() {
         return new GUIObjectBuilder();
     }
 
+    /**
+     * Constroi o GUIObject
+     *
+     * @return
+     */
     public GUIObject build() {
         return new GUIObject(name, icon, openNewGUI, cancelClick) {
             public Result onClick(Source source) {

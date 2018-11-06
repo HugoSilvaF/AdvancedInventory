@@ -32,25 +32,60 @@ public abstract class GUIObject {
         this.cancelClick = cancelClick;
     }
 
+    /**
+     * Obtém o ícone do GUIObject, este será visto no invetário.
+     *
+     * @return
+     */
     public ItemStack getIcon() {
         return icon;
     }
 
+    /**
+     * Obtém o nome do GUIObject, para fazer um botão de próxima página é bom
+     * colocar "Próxima Página"
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Obtém o novo GUI que será aberto com este GUIObject, lembre-se que só irá
+     * abrir um novo GUI se tiver um para abrir
+     *
+     * @return
+     */
     public GUI getOpenNewGUI() {
         return openNewGUI;
     }
 
+    /**
+     * Obtém a boolean se o click foi cancelado, se sim true, se não false
+     *
+     * @return
+     */
     public boolean isCancelClick() {
         return cancelClick;
     }
 
+    /**
+     * Seta se o ao clicar no item o click será cancelado, se não for cancelado
+     * o jogador pode retirar o item
+     *
+     * @param cancelClick
+     */
     public void setCancelClick(boolean cancelClick) {
         this.cancelClick = cancelClick;
     }
 
+    /**
+     * Este método é chamado ao jogador clicar no item. Retorna o resultado,
+     * próxima página ou nada, o dev decide.
+     *
+     * @param paramSource
+     * @return
+     */
     public abstract Result onClick(Source paramSource);
 }

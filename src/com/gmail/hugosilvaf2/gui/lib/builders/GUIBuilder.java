@@ -35,27 +35,56 @@ public class GUIBuilder {
         pages = new LinkedList();
     }
 
+    /**
+     * Seta o nome do GUI
+     *
+     * @param name
+     * @return
+     */
     public GUIBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Seta o titulo do GUI, este será exibido no inventário
+     *
+     * @param title
+     * @return
+     */
     public GUIBuilder setTitlte(String title) {
         this.title = title;
         return this;
     }
 
+    /**
+     * Seta o tamanho do GUI, deverá ser de acordo com o tamanho das páginas
+     *
+     * @param size
+     * @return
+     */
     public GUIBuilder setSize(int size) {
         this.size = size;
 
         return this;
     }
 
+    /**
+     * Adiciona uma página no GUI
+     *
+     * @param page
+     * @return
+     */
     public GUIBuilder addPage(Page page) {
         pages.add(page);
         return this;
     }
 
+    /**
+     * Constroi o GUI
+     *
+     * @return
+     */
     public GUI build() {
         gui = new GUI(name, title, size);
         pages.stream().forEach(a -> gui.add(a));
