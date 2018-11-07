@@ -39,9 +39,11 @@ public class LojaObjetos extends GUIObject {
 
     @Override
     public Result onClick(Source paramSource) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    // Aqui o objeto não irá ter nenhuma ação
+    // here do nothing
+        return Result.NOTHING;
     }
-
+  
 }
 ```
 Now, we go to create your bottom to the next page, stay ever in fixed place, and dont put anything on top.
@@ -56,7 +58,8 @@ public class ProximaPagina extends GUIObject {
 
     @Override
     public Result onClick(Source paramSource) {
-
+       // Aqui irá para próixima página
+       // here will the next page
         return Result.NEXT_PAGE;
     }
 
