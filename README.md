@@ -4,7 +4,7 @@ A simple GUI lib of inventory for minecraft plugins.
 
 Uma simples lib de GUI de inventários para minecraft.
 
-# Version 1.2 | Versão 1.2
+# Version 1.3 | Versão 1.3
 
 # OBSERVATION: | Observação:
 This lib version can have bugs, wait for more updates. any bug or suggestion just create a issue.
