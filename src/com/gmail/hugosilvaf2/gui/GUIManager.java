@@ -23,6 +23,7 @@ import com.gmail.hugosilvaf2.gui.lib.Source;
 import com.gmail.hugosilvaf2.gui.lib.sections.Section;
 import com.gmail.hugosilvaf2.gui.lib.sections.Sections;
 import java.util.ArrayList;
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public class GUIManager
 
             if ((guio != null) && (guio.getIcon().equals(currentItem))) {
                 event.setCancelled(guio.isCancelClick());
-                Result result = guio.onClick(new Source(whoClicked, section, event.getClick(), new boolean[]{event.isLeftClick(), event.isRightClick(), event.isShiftClick()}));
+                Result result = guio.getOnClick().click(new Source(whoClicked, section, event.getClick(), new boolean[]{event.isLeftClick(), event.isRightClick(), event.isShiftClick()}));
                 if (result.equals(Result.NEXT_PAGE)) {
                     section.nextPage();
                     return;
@@ -96,7 +97,7 @@ public class GUIManager
             }
         }
         // to cancel move and place items for GUI
-        if (!section.getNowPage().getMoveItems()) {
+        if (!section.getNowPage().moveItems()) {
             if (section.compareTo(event.getInventory())) {
                 if (event.getRawSlot() >= (section.getInventory().getSize() - 1) && event.getRawSlot() <= (section.getInventory().getSize() - 1) + 36) {
                     if (event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY) {
@@ -122,27 +123,57 @@ public class GUIManager
         }
     }
 
+    /**
+     * Abrirá o GUI através do nome do GUI
+     *
+     * @param player
+     * @param name
+     */
     public void openGUI(Player player, String name) {
         openGUI(player, getGUI(name));
     }
 
+    /**
+     * Abrirá o GUI
+     *
+     * @param player
+     * @param gui
+     */
     public void openGUI(Player player, GUI gui) {
-        Section section = new Section(gui, player, Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
+        Section section = new Section(gui, player, Bukkit.createInventory(player, gui.getFirst().size(), gui.getTitle()));
         section.updateInventory();
         sections.add(section);
         player.openInventory(section.getInventory());
     }
 
+    /**
+     * Obtém o GUI caso exista, se não retornará nulo
+     *
+     * @param name
+     * @return
+     */
     public GUI getGUI(String name) {
-        for (GUI gui : this) {
-            if (gui.getName().equals(name)) {
-                return gui;
-            }
-        }
-        return null;
+        return getOptionalGUI(name).get();
     }
 
-    public boolean hasGUI(String name) {
-        return getGUI(name) != null;
+    /**
+     * Obtém o Optional<GUI>
+     *
+     * @param name
+     * @return
+     */
+    public Optional<GUI> getOptionalGUI(String name) {
+        return stream().filter(n -> n.getName().equals(name)).findFirst();
+    }
+
+    /**
+     * Checa através do nome se o GUI existe, se sim retorna true, se não
+     * retorna false.
+     *
+     * @param name
+     * @return
+     */
+    public boolean existGUI(String name) {
+        return getOptionalGUI(name).isPresent();
     }
 }

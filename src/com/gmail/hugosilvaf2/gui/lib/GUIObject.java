@@ -20,17 +20,16 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class GUIObject {
 
+    public interface OnClick {
+
+        Result click(Source scr);
+    }
+
     private String name;
     private ItemStack icon;
     private GUI openNewGUI;
+    private OnClick OnClick;
     private boolean cancelClick;
-
-    public GUIObject(String name, ItemStack icon, GUI gui, boolean cancelClick) {
-        this.name = name;
-        this.icon = icon;
-        this.openNewGUI = gui;
-        this.cancelClick = cancelClick;
-    }
 
     /**
      * Obtém o ícone do GUIObject, este será visto no invetário.
@@ -62,6 +61,16 @@ public abstract class GUIObject {
     }
 
     /**
+     * Obtém a classe do OnClick onde tem o método que será chamado ao jogador
+     * clicar no objeto
+     *
+     * @return
+     */
+    public OnClick getOnClick() {
+        return OnClick;
+    }
+
+    /**
      * Obtém a boolean se o click foi cancelado, se sim true, se não false
      *
      * @return
@@ -76,16 +85,65 @@ public abstract class GUIObject {
      *
      * @param cancelClick
      */
-    public void setCancelClick(boolean cancelClick) {
+    public GUIObject setCancelClick(boolean cancelClick) {
         this.cancelClick = cancelClick;
+        return this;
     }
 
     /**
-     * Este método é chamado ao jogador clicar no item. Retorna o resultado,
-     * próxima página ou nada, o dev decide.
+     * Seta o OnClick método que será chamado ao jogador clicar no objeto
      *
-     * @param paramSource
+     * @param OnClick
      * @return
      */
-    public abstract Result onClick(Source paramSource);
+    public GUIObject setOnClick(OnClick OnClick) {
+        this.OnClick = OnClick;
+        return this;
+    }
+
+    /**
+     * Seta o nome do GUIObject, é para diferenciar dos objetos para botões,
+     * como botões de próximas páginas ou abrir novos inventários
+     *
+     * @param name
+     * @return
+     */
+    public GUIObject setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Seta o ícone do GUIObject
+     *
+     * @param icon
+     * @return
+     */
+    public GUIObject setIcon(ItemStack icon) {
+        this.icon = icon;
+        return this;
+    }
+
+    /**
+     * Seta o novo GUI que será aberto, caso o resultado do método onClick seje
+     * OPEN_NEW
+     *
+     * @param openNewGUI
+     * @return
+     */
+    public GUIObject setOpenNewGUI(GUI openNewGUI) {
+        this.openNewGUI = openNewGUI;
+        return this;
+    }
+
+    /**
+     * Obtém a instancia desta classe
+     *
+     * @return
+     */
+    public static GUIObject newInstance() {
+        return new GUIObject() {
+        };
+    }
+
 }

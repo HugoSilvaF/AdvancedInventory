@@ -17,6 +17,7 @@
 package com.gmail.hugosilvaf2.gui.lib.sections;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import org.bukkit.entity.Player;
 
 public class Sections
@@ -42,7 +43,17 @@ public class Sections
      * @return
      */
     public Section getSection(String name) {
-        return stream().filter(a -> a.getViewer().getName().equals(name)).findFirst().get();
+        return getOptionalSection(name).get();
+    }
+
+    /**
+     * Obtém a seção através do nome do jogador
+     *
+     * @param name
+     * @return
+     */
+    public Optional<Section> getOptionalSection(String name) {
+        return stream().filter(a -> a.getViewer().getName().equals(name)).findFirst();
     }
 
     /**
@@ -52,7 +63,7 @@ public class Sections
      * @return
      */
     public boolean hasSection(Player player) {
-        return getSection(player) != null;
+        return hasSection(player.getName());
     }
 
     /**
@@ -62,6 +73,6 @@ public class Sections
      * @return
      */
     public boolean hasSection(String name) {
-        return getSection(name) != null;
+        return getOptionalSection(name).isPresent();
     }
 }

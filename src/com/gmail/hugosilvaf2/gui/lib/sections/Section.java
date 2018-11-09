@@ -17,7 +17,7 @@
 package com.gmail.hugosilvaf2.gui.lib.sections;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
-import com.gmail.hugosilvaf2.gui.lib.Page;
+import com.gmail.hugosilvaf2.gui.lib.Pages.Page;
 import java.util.Arrays;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -147,7 +147,9 @@ public class Section {
         inventory.clear();
         Page page = (Page) getGui().get(nowPage);
         for (int i = 0; i < page.size(); i++) {
-            inventory.setItem(i, page.get(i).getIcon());
+            if (page.get(i) != null) {
+                inventory.setItem(i, page.get(i).getIcon());
+            }
         }
         viewer.updateInventory();
     }

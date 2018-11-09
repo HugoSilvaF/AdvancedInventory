@@ -16,20 +16,11 @@
  */
 package com.gmail.hugosilvaf2.gui.lib;
 
-public class GUI
-        extends Pages {
+import java.util.Collection;
 
-    private String name;
+public abstract class GUI extends Pages {
 
-    private String title;
-
-    private int size;
-
-    public GUI(String name, String title, int size) {
-        this.name = name;
-        this.title = title;
-        this.size = size;
-    }
+    private String name, title;
 
     /**
      * Obtém o nome do GUI por exemplo "Loja"
@@ -37,7 +28,7 @@ public class GUI
      * @return
      */
     public String getName() {
-        return name;
+        return this.name;
     }
 
     /**
@@ -46,15 +37,73 @@ public class GUI
      * @return
      */
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     /**
-     * Obtém o tamnho do GUI, que deverá ser o mesmo tamanho das páginas
+     * Altera o nome do GUI, é para uso interno
+     *
+     * @param name
+     * @return
+     */
+    public GUI setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Altera o titulo do GUI, sera visualizado para os jogadores
+     *
+     * @param title
+     * @return
+     */
+    public GUI setTitle(String title) {
+        this.title = title;
+        return this;
+    }
+
+    /**
+     * Adiciona a página
+     *
+     * @param page
+     * @return
+     */
+    public GUI addPage(Page page) {
+        add(page);
+        return this;
+    }
+
+    /**
+     * Adiciona todoas páginas da Collection c
+     *
+     * @param c
+     * @return
+     */
+    public GUI addPageAll(Collection<? extends Page> c) {
+        addAll(c);
+        return this;
+    }
+
+    /**
+     * Adiciona todoas páginas da Collection c a partir do index
+     *
+     * @param index
+     * @param c
+     * @return
+     */
+    public GUI addPageAll(int index, Collection<? extends Page> c) {
+        addAll(index, c);
+        return this;
+    }
+
+    /**
+     * Obtéma instancia desta classe
      *
      * @return
      */
-    public int getSize() {
-        return size;
+    public static GUI newInstance() {
+        return new GUI() {
+        };
     }
+
 }

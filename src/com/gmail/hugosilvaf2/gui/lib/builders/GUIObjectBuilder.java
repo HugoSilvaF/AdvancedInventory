@@ -18,21 +18,24 @@ package com.gmail.hugosilvaf2.gui.lib.builders;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
 import com.gmail.hugosilvaf2.gui.lib.GUIObject;
-import com.gmail.hugosilvaf2.gui.lib.Result;
-import com.gmail.hugosilvaf2.gui.lib.Source;
+import com.gmail.hugosilvaf2.gui.lib.GUIObject.OnClick;
 import org.bukkit.inventory.ItemStack;
 
 public class GUIObjectBuilder {
 
     private String name;
     private ItemStack icon;
-    private Result result;
     private GUI openNewGUI;
-    private int location;
-    private boolean cancelClick;
+    private OnClick onClick;
+    private boolean cancelClick = true;
 
-    public GUIObjectBuilder() {
-        result = Result.NOTHING;
+    /**
+     * Obtém o nome do GUIObject
+     *
+     * @return
+     */
+    public String getName() {
+        return name;
     }
 
     /**
@@ -45,39 +48,12 @@ public class GUIObjectBuilder {
     }
 
     /**
-     * Obtém o nome do GUIObject
-     *
-     * @return
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Obtém o resultado do GUIObject, se ele irá para próxima página etc..
-     *
-     * @return
-     */
-    public Result getResult() {
-        return result;
-    }
-
-    /**
      * Pega o novo GUI que será aberto ao clicar neste GUIObject
      *
      * @return
      */
     public GUI getOpenNewGUI() {
         return openNewGUI;
-    }
-
-    /**
-     * Pega a localização deste GUIObject
-     *
-     * @return
-     */
-    public int getLocation() {
-        return location;
     }
 
     /**
@@ -90,14 +66,26 @@ public class GUIObjectBuilder {
     }
 
     /**
-     * Seta a localização do GUIObject
+     * Seta o nome do GUIObject
      *
-     * @param location
+     * @param name
+     * @return
      */
-    public void setLocation(int location) {
-        this.location = location;
+    public GUIObjectBuilder setName(String name) {
+        this.name = name;
+        return this;
     }
 
+    /**
+     * Seta o ícone do GUIObject
+     *
+     * @param icon
+     * @return
+     */
+    public GUIObjectBuilder setIcon(ItemStack icon) {
+        this.icon = icon;
+        return this;
+    }
     /**
      * Seta se o click será cancelado ao clicar no GUIObject
      *
@@ -121,36 +109,8 @@ public class GUIObjectBuilder {
         return this;
     }
 
-    /**
-     * Seta o ícone do GUIObject
-     *
-     * @param icon
-     * @return
-     */
-    public GUIObjectBuilder setIcon(ItemStack icon) {
-        this.icon = icon;
-        return this;
-    }
-
-    /**
-     * Seta o nome do GUIObject
-     *
-     * @param name
-     * @return
-     */
-    public GUIObjectBuilder setName(String name) {
-        this.name = name;
-        return this;
-    }
-
-    /**
-     * Seta o resultado do GUIObject
-     *
-     * @param result
-     * @return
-     */
-    public GUIObjectBuilder setResult(Result result) {
-        this.result = result;
+    public GUIObjectBuilder setOnClick(OnClick onClick) {
+        this.onClick = onClick;
         return this;
     }
 
@@ -159,7 +119,7 @@ public class GUIObjectBuilder {
      *
      * @return
      */
-    public static GUIObjectBuilder instance() {
+    public static GUIObjectBuilder newInstance() {
         return new GUIObjectBuilder();
     }
 
@@ -169,10 +129,7 @@ public class GUIObjectBuilder {
      * @return
      */
     public GUIObject build() {
-        return new GUIObject(name, icon, openNewGUI, cancelClick) {
-            public Result onClick(Source source) {
-                return result;
-            }
-        };
+        return GUIObject.newInstance().setName(name).setIcon(icon).setCancelClick(cancelClick).setOpenNewGUI(openNewGUI).setOnClick(onClick);
+
     }
 }
