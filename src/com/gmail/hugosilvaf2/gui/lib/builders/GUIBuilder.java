@@ -17,54 +17,62 @@
 package com.gmail.hugosilvaf2.gui.lib.builders;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
-import com.gmail.hugosilvaf2.gui.lib.Page;
+import com.gmail.hugosilvaf2.gui.lib.Pages.Page;
 import java.util.LinkedList;
 
 public class GUIBuilder {
 
-    private GUI gui;
     private String name;
     private String title;
-    int size;
     private LinkedList<Page> pages;
 
     public GUIBuilder() {
-        size = 54;
-        name = "Default Name";
-        title = "Default Title";
         pages = new LinkedList();
     }
 
+    /**
+     * Seta o nome do GUI
+     *
+     * @param name
+     * @return
+     */
     public GUIBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
+    /**
+     * Seta o titulo do GUI, este será exibido no inventário
+     *
+     * @param title
+     * @return
+     */
     public GUIBuilder setTitlte(String title) {
         this.title = title;
         return this;
     }
 
-    public GUIBuilder setSize(int size) {
-        this.size = size;
-
-        return this;
-    }
-
+    /**
+     * Adiciona uma página no GUI
+     *
+     * @param page
+     * @return
+     */
     public GUIBuilder addPage(Page page) {
         pages.add(page);
         return this;
     }
 
+    /**
+     * Constroi o GUI
+     *
+     * @return
+     */
     public GUI build() {
-        gui = new GUI(name, title, size);
-        for (Page page : pages) {
-            gui.add(page);
-        }
-        return gui;
+        return GUI.newInstance().setName(name).setTitle(title).addPageAll(pages);
     }
 
-    public static GUIBuilder instance() {
+    public static GUIBuilder newInstance() {
         return new GUIBuilder();
     }
 }

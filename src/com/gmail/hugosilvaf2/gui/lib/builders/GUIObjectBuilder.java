@@ -18,85 +18,118 @@ package com.gmail.hugosilvaf2.gui.lib.builders;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
 import com.gmail.hugosilvaf2.gui.lib.GUIObject;
-import com.gmail.hugosilvaf2.gui.lib.Result;
-import com.gmail.hugosilvaf2.gui.lib.Source;
+import com.gmail.hugosilvaf2.gui.lib.GUIObject.OnClick;
 import org.bukkit.inventory.ItemStack;
 
 public class GUIObjectBuilder {
 
     private String name;
     private ItemStack icon;
-    private Result result;
     private GUI openNewGUI;
-    private int location;
-    private boolean cancelClick;
+    private OnClick onClick;
+    private boolean cancelClick = true;
 
-    public GUIObjectBuilder() {
-        result = Result.NOTHING;
-    }
-
-    public ItemStack getIcon() {
-        return icon;
-    }
-
+    /**
+     * Obtém o nome do GUIObject
+     *
+     * @return
+     */
     public String getName() {
         return name;
     }
 
-    public Result getResult() {
-        return result;
+    /**
+     * Obtém o ícone
+     *
+     * @return
+     */
+    public ItemStack getIcon() {
+        return icon;
     }
 
+    /**
+     * Pega o novo GUI que será aberto ao clicar neste GUIObject
+     *
+     * @return
+     */
     public GUI getOpenNewGUI() {
         return openNewGUI;
     }
 
-    public int getLocation() {
-        return location;
-    }
-
-    public boolean isCancelClick() {
+    /**
+     * Checa se o click será cancelado ao clicar no GUIObject
+     *
+     * @return
+     */
+    public boolean cancelClick() {
         return cancelClick;
     }
 
-    public void setLocation(int location) {
-        this.location = location;
-    }
-
-    public GUIObjectBuilder setCancelClick(boolean cancelClick) {
-        this.cancelClick = cancelClick;
-        return this;
-    }
-
-    public GUIObjectBuilder setOpenNewGUI(GUI openNewGUI) {
-        this.openNewGUI = openNewGUI;
-        return this;
-    }
-
-    public GUIObjectBuilder setIcon(ItemStack icon) {
-        this.icon = icon;
-        return this;
-    }
-
+    /**
+     * Seta o nome do GUIObject
+     *
+     * @param name
+     * @return
+     */
     public GUIObjectBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
-    public GUIObjectBuilder setResult(Result result) {
-        this.result = result;
+    /**
+     * Seta o ícone do GUIObject
+     *
+     * @param icon
+     * @return
+     */
+    public GUIObjectBuilder setIcon(ItemStack icon) {
+        this.icon = icon;
+        return this;
+    }
+    /**
+     * Seta se o click será cancelado ao clicar no GUIObject
+     *
+     * @param cancelClick
+     * @return
+     */
+    public GUIObjectBuilder setCancelClick(boolean cancelClick) {
+        this.cancelClick = cancelClick;
         return this;
     }
 
-    public static GUIObjectBuilder instance() {
+    /**
+     * Seta o novo GUI que será aberto ao clicar no objeto, e se o restulado
+     * retornar OPEN_NEW
+     *
+     * @param openNewGUI
+     * @return
+     */
+    public GUIObjectBuilder setOpenNewGUI(GUI openNewGUI) {
+        this.openNewGUI = openNewGUI;
+        return this;
+    }
+
+    public GUIObjectBuilder setOnClick(OnClick onClick) {
+        this.onClick = onClick;
+        return this;
+    }
+
+    /**
+     * Obtém a instancia desta classe
+     *
+     * @return
+     */
+    public static GUIObjectBuilder newInstance() {
         return new GUIObjectBuilder();
     }
 
+    /**
+     * Constroi o GUIObject
+     *
+     * @return
+     */
     public GUIObject build() {
-        return new GUIObject(name, icon, openNewGUI, cancelClick) {
-            public Result onClick(Source source) {
-                return result;
-            }
-        };
+        return GUIObject.newInstance().setName(name).setIcon(icon).setCancelClick(cancelClick).setOpenNewGUI(openNewGUI).setOnClick(onClick);
+
     }
 }

@@ -17,113 +17,132 @@
 package com.gmail.hugosilvaf2.gui;
 
 import com.gmail.hugosilvaf2.gui.lib.GUI;
-import com.gmail.hugosilvaf2.gui.lib.GUIObject;
-import com.gmail.hugosilvaf2.gui.lib.Result;
-import com.gmail.hugosilvaf2.gui.lib.Source;
+import com.gmail.hugosilvaf2.gui.lib.listener.InventoryListener;
 import com.gmail.hugosilvaf2.gui.lib.sections.Section;
 import com.gmail.hugosilvaf2.gui.lib.sections.Sections;
-import java.util.ArrayList;
+import com.gmail.hugosilvaf2.gui.lib.updater.Updater;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
-public class GUIManager
-        extends ArrayList<GUI>
-        implements Listener {
+public class GUIManager {
 
-    private Plugin plugin;
-    private Sections sections;
+    private static ConcurrentLinkedQueue<GUI> cache;
 
-    public GUIManager(Plugin plugin) {
-        this.plugin = plugin;
-        sections = new Sections();
-        Bukkit.getPluginManager().registerEvents(this, plugin);
+    private static Plugin plugin;
+    private static Sections sections;
+    private static Updater updater;
+
+    private static InventoryListener listener;
+
+    /**
+     * Inicia as configurações da lib
+     * @param p 
+     */
+    public static void start(Plugin p) {
+        plugin      = plugin    != null ? plugin    : p;
+        cache       = cache     != null ? cache     : new ConcurrentLinkedQueue<>();
+        sections    = sections  != null ? sections  : new Sections();
+        updater     = updater   != null ? updater   : new Updater(plugin);
+        listener    = listener  != null ? listener  : new InventoryListener(plugin);
+
+        Bukkit.getPluginManager().registerEvents(listener, plugin);
+
+        updater.start();
+    }
+    
+    /**
+     * Obtém as seções
+     * 
+     * @return 
+     */
+    public static Sections getSections(){
+        return sections;
     }
 
-    @EventHandler
-    public void onClick(InventoryClickEvent event) {
-        if (!(event.getWhoClicked() instanceof Player)) {
-            return;
-        }
-
-        final Player whoClicked = (Player) event.getWhoClicked();
-
-        if ((sections.hasSection(whoClicked)) && (event.getCurrentItem() != null) && (!event.getCurrentItem().getType().equals(Material.AIR))) {
-            Section section = sections.getSection(whoClicked);
-            ItemStack currentItem = event.getCurrentItem();
-
-            final GUIObject guio = section.getNowPage().get(event.getSlot());
-            if (event.getInventory().equals(section.getInventory())) {
-                event.setCancelled(true);
-            }
-            if ((guio != null) && (guio.getIcon().equals(currentItem))) {
-                event.setCancelled(guio.isCancelClick());
-                Result result = guio.onClick(new Source(whoClicked, section, event.getClick(), new boolean[]{event.isLeftClick(), event.isRightClick(), event.isShiftClick()}));
-                if (result.equals(Result.NEXT_PAGE)) {
-                    section.nextPage();
-                    return;
-                }
-                if (result.equals(Result.PREVIOUS_PAGE)) {
-                    section.previousPage();
-                    return;
-                }
-                if (result.equals(Result.OPEN_NEW)) {
-                    whoClicked.closeInventory();
-                    BukkitRunnable runnable = new BukkitRunnable() {
-                        public void run() {
-                            openGUI(whoClicked, guio.getOpenNewGUI());
-                        }
-                    };
-                    runnable.runTaskLater(plugin, 5L);
-                    return;
-                }
-                if (result.equals(Result.NOTHING)) {
-                    return;
-                }
-                if (result.equals(Result.CLOSE)) {
-                    whoClicked.closeInventory();
-                    sections.remove(section);
-                }
-            }
-        }
+    /**
+     * Obtém o updater
+     *
+     * @return
+     */
+    public static Updater getUpdater() {
+        return updater;
     }
 
-    @EventHandler
-    public void onClose(InventoryCloseEvent event) {
-        if (((event.getPlayer() instanceof Player))
-                && (sections.hasSection((Player) event.getPlayer()))) {
-            sections.remove(sections.getSection((Player) event.getPlayer()));
-        }
+    /**
+     * Registra um GUI
+     *
+     * @param gui
+     * @return
+     */
+    public static void register(GUI gui) {
+        cache.add(gui);
     }
 
-    public void openGUI(Player player, String name) {
-        openGUI(player, getGUI(name));
+    /**
+     * Remove o registro
+     *
+     * @param gui
+     * @return
+     */
+    public static void remove(GUI gui) {
+        cache.remove(gui);
     }
 
-    public void openGUI(Player player, GUI gui) {
-        Section section = new Section(gui, player, Bukkit.createInventory(player, gui.getSize(), gui.getTitle()));
+    /**
+     * Abrirá o GUI através do nome do GUI
+     *
+     * @param player
+     * @param name
+     */
+    public static void openToPlayer(Player player, String name) {
+        openToPlayer(player, getGUI(name));
+    }
+
+    /**
+     * Abrirá o GUI
+     *
+     * @param player
+     * @param gui
+     */
+    public static void openToPlayer(Player player, GUI gui) {
+        Section section = new Section(gui, player, Bukkit.createInventory(player, gui.getFirst().size(), gui.getTitle()));
         section.updateInventory();
         sections.add(section);
         player.openInventory(section.getInventory());
     }
 
-    public GUI getGUI(String name) {
-        for (GUI gui : this) {
-            if (gui.getName().equals(name)) {
-                return gui;
-            }
-        }
-        return null;
+    /**
+     * Obtém o GUI caso exista, se não retornará nulo
+     *
+     * @param name
+     * @return
+     */
+    public static GUI getGUI(String name) {
+        return getOptionalGUI(name).get();
     }
 
-    public boolean hasGUI(String name) {
-        return getGUI(name) != null;
+
+    /**
+     * Checa através do nome se o GUI existe, se sim retorna true, se não
+     * retorna false.
+     *
+     * @param name
+     * @return
+     */
+    public static boolean existGUI(String name) {
+        return getOptionalGUI(name).isPresent();
+    }
+    
+    /**
+     * Obtém o Optional<GUI>
+     *
+     * @param name
+     * @return
+     */
+    public static Optional<GUI> getOptionalGUI(String name) {
+        return cache.stream().filter(n -> n.getName().equals(name)).findFirst();
     }
 }
