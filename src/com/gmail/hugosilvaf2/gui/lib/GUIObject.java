@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 public abstract class GUIObject {
 
-    public interface OnClick {
+    public static interface OnClick {
 
         Result click(Source scr);
     }

@@ -61,7 +61,7 @@ public class GUIObjectBuilder {
      *
      * @return
      */
-    public boolean isCancelClick() {
+    public boolean cancelClick() {
         return cancelClick;
     }
 

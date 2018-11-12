@@ -30,11 +30,11 @@ public class Section {
     private int nowPage;
 
     public Section(GUI gui, Player viewer, Inventory inventory) {
-        this.gui = gui;
-        this.viewer = viewer;
-        this.inventory = inventory;
+        this.gui        = gui;
+        this.viewer     = viewer;
+        this.inventory  = inventory;
 
-        nowPage = 0;
+       this. nowPage    = 0;
     }
 
     /**
