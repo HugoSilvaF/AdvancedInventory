@@ -25,8 +25,15 @@ public class Pages
 
     public static abstract class Page {
 
-        private GUIObject[] guios = new GUIObject[9];
+        public static interface OnUpdate {
 
+            public void update();
+        }
+
+        private GUIObject[] guiObjects = new GUIObject[9];
+        private OnUpdate updater;
+
+        // remover isso, deixar como tutorial no git, procurar como fazer sem o evento
         boolean moveItems = false;
 
         /**
@@ -37,7 +44,7 @@ public class Pages
          * @return
          */
         public Page addGUIObject(int index, GUIObject guio) {
-            guios[index] = guio;
+            guiObjects[index] = guio;
             return this;
         }
 
@@ -59,7 +66,7 @@ public class Pages
          * @return
          */
         public GUIObject get(int index) {
-            return guios[index];
+            return guiObjects[index];
         }
 
         /**
@@ -69,12 +76,21 @@ public class Pages
          * @return
          */
         public GUIObject getGUIObject(ItemStack is) {
-            for (GUIObject object : guios) {
+            for (GUIObject object : guiObjects) {
                 if (is.equals(object.getIcon())) {
                     return object;
                 }
             }
             return null;
+        }
+
+        /**
+         * Obtém o updater
+         *
+         * @return
+         */
+        public OnUpdate getUpdater() {
+            return updater;
         }
 
         /**
@@ -99,7 +115,18 @@ public class Pages
          * @return
          */
         public Page setSize(int i) {
-            this.guios = new GUIObject[i];
+            this.guiObjects = new GUIObject[i];
+            return this;
+        }
+
+        /**
+         * Seta o updater
+         *
+         * @param updater
+         * @return
+         */
+        public Page setUpdater(OnUpdate updater) {
+            this.updater = updater;
             return this;
         }
 
@@ -118,7 +145,7 @@ public class Pages
          * @return int
          */
         public int size() {
-            return guios.length;
+            return guiObjects.length;
         }
 
         /**
@@ -128,8 +155,8 @@ public class Pages
          * @return int
          */
         public int firstEmpty() {
-            for (int i = 0; i < guios.length; i++) {
-                if (guios[i] == null) {
+            for (int i = 0; i < guiObjects.length; i++) {
+                if (guiObjects[i] == null) {
                     return i;
                 }
             }

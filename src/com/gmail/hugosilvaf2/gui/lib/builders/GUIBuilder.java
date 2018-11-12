@@ -22,14 +22,11 @@ import java.util.LinkedList;
 
 public class GUIBuilder {
 
-    private GUI gui;
     private String name;
     private String title;
     private LinkedList<Page> pages;
 
     public GUIBuilder() {
-        name = "Default Name";
-        title = "Default Title";
         pages = new LinkedList();
     }
 

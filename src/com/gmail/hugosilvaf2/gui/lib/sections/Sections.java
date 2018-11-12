@@ -16,44 +16,34 @@
  */
 package com.gmail.hugosilvaf2.gui.lib.sections;
 
-import java.util.ArrayList;
 import java.util.Optional;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import org.bukkit.entity.Player;
 
-public class Sections
-        extends ArrayList<Section> {
+public class Sections {
 
-    public Sections() {
+    public static final ConcurrentLinkedQueue<Section> cache = new ConcurrentLinkedQueue<>();
+
+    /**
+     * Adiciona a seção ao cache
+     *
+     * @param section
+     * @return
+     */
+    public Sections add(Section section) {
+        cache.add(section);
+        return this;
     }
 
     /**
-     * Obtém a seção através do jogador
+     * Remove a seção do cache
      *
-     * @param player
+     * @param section
      * @return
      */
-    public Section getSection(Player player) {
-        return getSection(player.getName());
-    }
-
-    /**
-     * Obtém a seção através do nome do jogador
-     *
-     * @param name
-     * @return
-     */
-    public Section getSection(String name) {
-        return getOptionalSection(name).get();
-    }
-
-    /**
-     * Obtém a seção através do nome do jogador
-     *
-     * @param name
-     * @return
-     */
-    public Optional<Section> getOptionalSection(String name) {
-        return stream().filter(a -> a.getViewer().getName().equals(name)).findFirst();
+    public Sections remove(Section section) {
+        cache.remove(section);
+        return this;
     }
 
     /**
@@ -75,4 +65,35 @@ public class Sections
     public boolean hasSection(String name) {
         return getOptionalSection(name).isPresent();
     }
+  
+    /**
+     * Obtém a seção através do jogador
+     *
+     * @param player
+     * @return
+     */
+    public Section getSection(Player player) {
+        return getSection(player.getName());
+    }
+
+    /**
+     * Obtém a seção através do nome do jogador
+     *
+     * @param name
+     * @return
+     */
+    public Section getSection(String name) {
+        return getOptionalSection(name).get();
+    }
+    
+     /**
+     * Obtém a seção através do nome do jogador
+     *
+     * @param name
+     * @return
+     */
+    public Optional<Section> getOptionalSection(String name) {
+        return cache.stream().filter(a -> a.getViewer().getName().equals(name)).findFirst();
+    }
+
 }

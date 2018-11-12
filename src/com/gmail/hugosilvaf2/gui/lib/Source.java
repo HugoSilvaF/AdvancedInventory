@@ -17,10 +17,13 @@
 package com.gmail.hugosilvaf2.gui.lib;
 
 import com.gmail.hugosilvaf2.gui.lib.sections.Section;
+import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -30,13 +33,27 @@ public class Source {
     private final Player player;
     private final GUI gui;
     private final ClickType clickType;
-    private final boolean[] clicks;
+    private final InventoryAction action;
 
-    public Source(Player player, Section section, ClickType clickType, boolean[] clicks) {
+    private final int slot;
+    private final int rawSlot;
+    private final InventoryType.SlotType slotType;
+
+    private final ItemStack currentItem;
+    private final ItemStack cursorItem;
+
+    public Source(Player player, Section section, ClickType clickType, InventoryAction action, int slot, int rawSlot, InventoryType.SlotType slotType, ItemStack currentItem, ItemStack cursorItem) {
         this.player = player;
-        gui = section.getGui();
+        this.gui = section.getGui();
         this.clickType = clickType;
-        this.clicks = clicks;
+        this.action = action;
+
+        this.slot = slot;
+        this.rawSlot = rawSlot;
+        this.slotType = slotType;
+
+        this.currentItem = currentItem;
+        this.cursorItem = cursorItem;
     }
 
     /**
@@ -67,6 +84,15 @@ public class Source {
     }
 
     /**
+     * Retorna o InventoryAction do evento InventoryClick
+     *
+     * @return
+     */
+    public InventoryAction getInventoryAction() {
+        return action;
+    }
+
+    /**
      * Obtém o inventário do jogador
      *
      * @return
@@ -76,18 +102,78 @@ public class Source {
     }
 
     /**
-     * Envia mensagem ao jogador
+     * Retorna o tipo do slot
      *
-     * @param message
      * @return
      */
-    public Source sendMessage(String... message) {
-        getPlayer().sendMessage(message);
+    public InventoryType.SlotType getSlotType() {
+        return slotType;
+    }
+
+    /**
+     * Retorna o item atual
+     *
+     * @return
+     */
+    public ItemStack getCurrentItem() {
+        return currentItem;
+    }
+
+    /**
+     * Retorna o Item do cursor
+     *
+     * @return
+     */
+    public ItemStack getCursorItem() {
+        return cursorItem;
+    }
+
+    /**
+     * Retorna o Slot do evento InventoryClickEvent
+     *
+     * @return
+     */
+    public int getSlot() {
+        return slot;
+    }
+
+    /**
+     * Retorna o RawSlot do evento InventoryClickEvent
+     *
+     * @return
+     */
+    public int getRawSlot() {
+        return rawSlot;
+    }
+
+    /**
+     * Envia um array ou lista de mensagem mensagens ao jogador
+     *
+     * @param t
+     * @return
+     */
+    public <T> Source sendMessage(T t) {
+        if(t instanceof String []) {
+            for(String a : (String[])t) {
+                getPlayer().sendMessage(a);
+            }
+            return this;
+        }
+        if(t instanceof List ) {
+            for(String a : (List<String>)t) {
+                getPlayer().sendMessage(a);
+            }
+            return this;
+        }
+        if(t instanceof String) {
+            getPlayer().sendMessage((String) t);
+        }
         return this;
     }
 
     /**
-     * Envia ItemStack ao jogador
+     * Envia ItemStack ao jogador, se o inventário estiver cheio o item será
+     * jogado no chão
      *
      * @param itemStack
      * @return
@@ -106,30 +192,4 @@ public class Source {
         return this;
     }
 
-    /**
-     * Obtém a boolean se o jogador clicou com o botão esquerdo do mouse
-     *
-     * @return
-     */
-    public boolean clickedLeft() {
-        return clicks[0];
-    }
-
-    /**
-     * Obtém a boolean se o jogador clicou com o botão direit do mouse
-     *
-     * @return
-     */
-    public boolean clickedRight() {
-        return clicks[1];
-    }
-
-    /**
-     * Obtém a boolean se o jogador clicou com o shift pressionado
-     *
-     * @return
-     */
-    public boolean clickedShift() {
-        return clicks[2];
-    }
 }
