@@ -40,8 +40,10 @@ public class Updater extends Thread {
         if (!destroy) {
             started = true;
             GUIManager.getSections().cache.forEach(n -> {
-                n.getNowPage().getUpdater().update();
-                n.updateInventory();
+                if (n.getNowPage().getUpdater() != null) {
+                    n.getNowPage().getUpdater().update();
+                    n.updateInventory();
+                }
             });
             Bukkit.getScheduler().runTaskLater(plugin, this, 10L);
         }

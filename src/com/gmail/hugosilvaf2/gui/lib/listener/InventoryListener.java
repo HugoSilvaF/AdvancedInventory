@@ -62,11 +62,14 @@ public class InventoryListener implements Listener {
         Section section = GUIManager.getSections().getSection(whoClicked);
         if ((event.getCurrentItem() != null) && (!event.getCurrentItem().getType().equals(Material.AIR))) {
             ItemStack currentItem = event.getCurrentItem();
-            final GUIObject guio = section.getNowPage().get(event.getSlot());
+            final GUIObject guiObj = section.getNowPage().get(event.getSlot());
 
-            if ((guio != null) && (guio.getIcon().equals(currentItem))) {
-                event.setCancelled(guio.isCancelClick());
-                Result result = guio.getOnClick().click(new Source(whoClicked, section, event.getClick(), event.getAction(), event.getSlot(), event.getRawSlot(), event.getSlotType(), event.getCurrentItem(), event.getCursor()));
+            if ((guiObj != null) && (guiObj.getIcon().equals(currentItem))) {
+                event.setCancelled(guiObj.cancelClick());
+                if(guiObj.getOnClick() == null) {
+                    return;
+                }
+                Result result = guiObj.getOnClick().click(new Source(whoClicked, section, event.getClick(), event.getAction(), event.getSlot(), event.getRawSlot(), event.getSlotType(), event.getCurrentItem(), event.getCursor()));
                 if (result.equals(Result.NEXT_PAGE)) {
                     section.nextPage();
                     return;
@@ -79,7 +82,7 @@ public class InventoryListener implements Listener {
                     whoClicked.closeInventory();
                     BukkitRunnable runnable = new BukkitRunnable() {
                         public void run() {
-                            GUIManager.openToPlayer(whoClicked, guio.getOpenNewGUI());
+                            GUIManager.openToPlayer(whoClicked, guiObj.getOpenNewGUI());
                         }
                     };
                     runnable.runTaskLater(plugin, 5L);
